@@ -6,7 +6,7 @@ if (!sessionStorage.getItem("state")) {
 }
 const clientId = "752142ca66624fbaa14aae32426abfcc";
 // const redirectURI = "http://localhost:3000/";
-const redirectURI = "https://spot0n.surge.sh/";
+const redirectURI = "https://spot0n.netlify.app/";
 const Spotify = {
 	getAccessToken() {
 		if (accessToken) return accessToken;
