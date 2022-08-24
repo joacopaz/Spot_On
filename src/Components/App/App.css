@@ -1,0 +1,71 @@
+body,
+html,
+#root {
+	height: 100%;
+}
+html,
+.App {
+	background-image: url("./background_photo_desktop.jpg");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+html {
+	font-size: 18px;
+	scroll-behavior: smooth;
+}
+
+h1 {
+	padding: 0.77rem 0;
+	background-color: #010c3f;
+	text-align: center;
+	font-family: "Poppins", sans-serif;
+	font-size: 1.88rem;
+	color: #fff;
+}
+
+h1 .highlight {
+	color: #6c41ec;
+}
+
+h2 {
+	font-family: "Poppins", sans-serif;
+	font-size: 1.55rem;
+	text-align: center;
+}
+
+.Description {
+	padding: 2rem 0 0 0;
+	font-size: 1.2rem;
+}
+
+.App {
+	height: 100%;
+	padding: 0 17% 10% 17%;
+	font-family: "Work Sans", sans-serif;
+	font-weight: 500;
+	color: #fff;
+}
+
+.App-playlist {
+	display: none;
+	justify-content: space-between;
+	width: 100%;
+}
+
+@media only screen and (max-width: 1020px) {
+	.App-playlist {
+		align-items: center;
+		flex-direction: column;
+	}
+	.App {
+		padding: 1rem;
+	}
+}
+@media only screen and (max-width: 670px) {
+	.App-playlist {
+		position: relative;
+		bottom: 4rem;
+	}
+}

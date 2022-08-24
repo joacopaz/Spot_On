@@ -1,0 +1,165 @@
+.container-playlists {
+	width: 100%;
+	display: flex;
+	justify-content: space-around;
+	gap: 1rem;
+	min-height: 58vh;
+}
+.Playlists,
+.Playlists-info {
+	width: 45%;
+	padding: 1rem;
+	display: flex;
+	margin: 2rem auto;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	max-height: 950px;
+	background-color: rgba(1, 12, 63, 0.7);
+	box-shadow: 0 4px 2px 2px #000000;
+	caret-color: transparent;
+}
+
+.Playlists h2 {
+	margin-top: 0.3rem;
+}
+
+.Playlists-info h2 {
+	font-size: 1.2rem;
+}
+.Playlists-info input {
+	width: 100%;
+	border: 0;
+	outline: 0;
+	background: transparent;
+	border-bottom: 1px solid #6f6f6f;
+	font-family: "Poppins", sans-serif;
+	font-size: 1.55rem;
+	color: #fff;
+}
+textarea.description {
+	box-sizing: border-box;
+	border: none;
+	font-size: 1rem;
+	font-family: inherit;
+	font-weight: 100;
+	background: none;
+	color: inherit;
+	width: 100%;
+	resize: none;
+}
+
+.Authentication {
+	cursor: pointer;
+	width: 8.11rem;
+	padding: 0.77rem 0;
+	border-radius: 54px;
+	background-color: #010c3f;
+	text-align: center;
+	font-size: 0.833rem;
+	transition: background-color 0.25s;
+	border: 0px;
+	color: #fff;
+	font-weight: 500;
+}
+
+.Authentication:hover {
+	background-color: rgba(108, 65, 233, 0.7);
+}
+
+.PlaylistList {
+	height: 80%;
+	margin: 1rem;
+}
+.PlaylistList li {
+	margin: 0.3rem;
+	font-weight: 100;
+	cursor: pointer;
+	width: fit-content;
+}
+
+.PlaylistList li:hover {
+	color: lightblue;
+}
+.PlaylistList ul,
+.TrackList {
+	overflow-y: scroll;
+}
+.Playlists-info .TrackList {
+	height: 95%;
+	max-height: 25rem;
+	margin-bottom: 1rem;
+}
+
+.Playlists-info .button-container {
+	display: flex;
+	position: relative;
+	align-items: flex-start;
+	justify-content: flex-start;
+	text-align: center;
+}
+.Playlists-info .button-container p {
+	font-weight: 100;
+}
+
+.Playlists .Add,
+.Playlists-info .Remove {
+	font-weight: 400;
+	text-align: center;
+	cursor: pointer;
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	outline: inherit;
+	width: fit-content;
+	/* display: block; */
+	margin: 0 auto;
+}
+
+.Playlists-info .Remove {
+	color: rgb(227, 71, 71);
+}
+.Playlists-info .Remove:hover {
+	color: rgb(144, 47, 47);
+}
+.Playlists .Add:hover {
+	color: lightblue;
+}
+
+@media only screen and (max-width: 1020px) {
+	.Playlists,
+	.Playlists-info {
+		width: 90%;
+	}
+}
+@media screen and (max-width: 660px) {
+	.container-playlists {
+		gap: 0;
+		position: relative;
+		bottom: 4rem;
+	}
+	.Playlists {
+		margin-top: 5rem;
+	}
+	.Playlists-info {
+		margin-top: 1rem;
+		padding: 0.4rem;
+		width: 100%;
+	}
+
+	.container-playlists {
+		flex-wrap: wrap;
+	}
+	.Playlists-info textarea {
+		display: none;
+	}
+	.Playlists-info .TrackList {
+		max-height: 65vmax;
+		padding: 0.2rem;
+	}
+	.Playlists-info input {
+		font-size: 1rem;
+	}
+}
