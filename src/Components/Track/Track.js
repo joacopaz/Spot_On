@@ -15,9 +15,11 @@ class Track extends React.Component {
 		this.handleClick = this.handleClick.bind(this);
 	}
 	addTrack() {
+		if (localStorage.getItem("isMock") === "true") return;
 		this.props.onAdd(this.props.track);
 	}
 	removeTrack() {
+		if (localStorage.getItem("isMock") === "true") return;
 		this.props.onRemove(this.props.track);
 	}
 	renderAction() {
@@ -36,6 +38,7 @@ class Track extends React.Component {
 		}
 	}
 	async handleClick() {
+		if (localStorage.getItem("isMock") === "true") return;
 		if (
 			this.props.track.name === this.props.activeTrackName.name &&
 			this.props.track.artist === this.props.activeTrackName.artist &&

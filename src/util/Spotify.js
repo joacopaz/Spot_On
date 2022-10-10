@@ -5,13 +5,15 @@ if (!sessionStorage.getItem("state")) {
 	sessionStorage.setItem("state", makeId(24));
 }
 const clientId = "752142ca66624fbaa14aae32426abfcc";
-// const redirectURI = "http://localhost:3000/";
-const redirectURI = "https://spot0n.netlify.app/";
+const redirectURI = "http://localhost:3000/";
+// const redirectURI = "https://spot0n.netlify.app/";
 const Spotify = {
 	getAccessToken() {
+		if (sessionStorage.getItem("isMock") === "true") {
+			return;
+		}
 		if (window.location.href.match(/error=access_denied/)) {
 			sessionStorage.setItem("auth", "false");
-			console.log("running");
 			return "ERROR";
 		}
 		if (accessToken) {
@@ -50,6 +52,7 @@ const Spotify = {
 		}
 	},
 	async search(term) {
+		if (sessionStorage.getItem("isMock") === "true") return;
 		const accessToken = Spotify.getAccessToken();
 		if (accessToken === "ERROR") return;
 		const url = "https://api.spotify.com/v1";
@@ -71,6 +74,7 @@ const Spotify = {
 		}));
 	},
 	async getPlaylists() {
+		if (sessionStorage.getItem("isMock") === "true") return;
 		const accessToken = Spotify.getAccessToken();
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		let userId;
@@ -90,6 +94,7 @@ const Spotify = {
 		return playlistsJson.items;
 	},
 	savePlaylist(name, trackUris, description) {
+		if (sessionStorage.getItem("isMock") === "true") return;
 		if (!name || !trackUris.length) return;
 		const accessToken = Spotify.getAccessToken();
 		if (accessToken === "ERROR") return;
@@ -166,6 +171,7 @@ const Spotify = {
 		});
 	},
 	async connectPlayer(player) {
+		if (sessionStorage.getItem("isMock") === "true") return;
 		const accessToken = await Spotify.getAccessToken();
 		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
@@ -180,6 +186,7 @@ const Spotify = {
 		}
 	},
 	async playSongs(deviceId, uris, context) {
+		if (sessionStorage.getItem("isMock") === "true") return;
 		const accessToken = await Spotify.getAccessToken();
 		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
@@ -222,6 +229,7 @@ const Spotify = {
 		return request;
 	},
 	async stopSong(deviceId) {
+		if (sessionStorage.getItem("isMock") === "true") return;
 		const accessToken = await Spotify.getAccessToken();
 		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
@@ -232,6 +240,7 @@ const Spotify = {
 		return request;
 	},
 	async setVolume(percentage, deviceId) {
+		if (sessionStorage.getItem("isMock") === "true") return;
 		const accessToken = await Spotify.getAccessToken();
 		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };

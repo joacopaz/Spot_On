@@ -12,6 +12,7 @@ class Player extends React.Component {
 	}
 
 	componentDidMount() {
+		if (sessionStorage.getItem("isMock" === "true")) return;
 		if (
 			!document.querySelector('[src="https://sdk.scdn.co/spotify-player.js"]')
 		) {
@@ -153,11 +154,20 @@ class Player extends React.Component {
 	}
 	render() {
 		return (
-			<div className="playerContainer">
+			<div
+				className="playerContainer"
+				style={
+					!this.props.isMock && !this.props.status ? { display: "none" } : {}
+				}>
 				<div className="player-left">
 					{this.state.ready && (
-						<span className="now-playing-container">
-							Now Playing: <span className="now-playing"></span>
+						<span
+							className="now-playing-container"
+							style={this.props.status ? {} : { margin: "0.4rem" }}>
+							Now Playing:
+							<span className="now-playing">
+								{this.props.isMock && "Rocketman - Elton John"}
+							</span>
 						</span>
 					)}
 				</div>
@@ -198,9 +208,11 @@ class Player extends React.Component {
 							step={1}
 							defaultValue={50}
 							onMouseUp={(e) => {
+								if (this.props.isMock) return;
 								this.props.setVolume(e.target.value);
 							}}
 							onTouchEnd={(e) => {
+								if (this.props.isMock) return;
 								this.props.setVolume(e.target.value);
 							}}
 							onChange={(e) => {

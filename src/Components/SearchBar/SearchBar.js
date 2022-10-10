@@ -5,12 +5,13 @@ class SearchBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			term: "",
+			term: this.props.isMock ? "Elton John" : "",
 		};
 		this.search = this.search.bind(this);
 		this.handleTermChange = this.handleTermChange.bind(this);
 	}
 	search() {
+		if (this.props.isMock) return;
 		this.props.onSearch(this.state.term);
 	}
 	handleTermChange(evt) {
@@ -28,6 +29,7 @@ class SearchBar extends React.Component {
 			<div className="SearchBar">
 				<input
 					placeholder="Enter A Song, Album, or Artist"
+					defaultValue={this.props.isMock ? "Elton John" : ""}
 					onChange={this.handleTermChange}
 				/>
 				<button className="SearchButton" onClick={this.search}>

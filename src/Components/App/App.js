@@ -23,6 +23,7 @@ class App extends React.Component {
 			playing: false,
 			createNew: false,
 			auth: false,
+			isMock: false,
 		};
 		this.addTrack = this.addTrack.bind(this);
 		this.removeTrack = this.removeTrack.bind(this);
@@ -41,6 +42,87 @@ class App extends React.Component {
 		this.updateTrack = this.updateTrack.bind(this);
 		this.setVolume = this.setVolume.bind(this);
 		this.awaitSetState = this.awaitSetState.bind(this);
+		this.generateMockData = this.generateMockData.bind(this);
+	}
+	generateMockData() {
+		sessionStorage.setItem("isMock", "true");
+		this.setState({
+			searchResults: [
+				{
+					album: "Cold Heart (PNAU Remix)",
+					artist: "Elton John",
+					name: "Cold Heart",
+				},
+				{
+					album: "Hold Me Closer",
+					artist: "Elton John",
+					name: "Hold Me Closer",
+				},
+				{
+					album: "Elton John - Deluxe edition",
+					artist: "Elton John",
+					name: "Your Song",
+				},
+			],
+			playlistName: "New Elton John Playlist",
+			playlistTracks: [
+				{
+					album: "Madman Across The Water",
+					artist: "Elton John",
+					name: "Tiny Dance",
+				},
+				{
+					album: "Honky Chateau",
+					artist: "Elton John",
+					name: "Rocket Man",
+				},
+				{
+					album: "Sleeping With The Past",
+					artist: "Elton John",
+					name: "Sacrifice",
+				},
+			],
+			userPlaylists: [
+				{
+					description: "Music for working in the wood shop",
+					name: "Woodworking Music",
+					tracks: {
+						href: "mock",
+						total: 178,
+					},
+					uri: "spotify:playlist:56rGRM0LeZwB2QGS8MmrEu",
+				},
+				{
+					description: "Peaceful and relaxing nature sounds to soothe the soul",
+					name: "Nature Sounds",
+					tracks: {
+						href: "mock",
+						total: 85,
+					},
+					uri: "spotify:playlist:56rGRM0LeZwB2QGS8MmrEu",
+				},
+				{
+					description: "Focusing and Study music",
+					name: "Deep Focus",
+					tracks: {
+						href: "mock",
+						total: 203,
+					},
+					uri: "spotify:playlist:56rGRM0LeZwB2QGS8MmrEu",
+				},
+			],
+			activeTrack: "spotify:track:2fzp6ojPHvZaz4uHXxpJVk",
+			activeTrackInfo: {
+				name: "Bartholomew",
+				artist: "The Silent Comedy",
+				album: "Common Faults",
+			},
+			playerConnected: true,
+			playing: false,
+			createNew: true,
+			auth: true,
+			isMock: true,
+		});
 	}
 	awaitSetState(newState) {
 		return new Promise((r) => this.setState(newState, r));
@@ -159,7 +241,11 @@ class App extends React.Component {
 		return;
 	}
 	async componentDidUpdate(prevProp, prevState) {
-		if (prevState.activeTrack !== this.state.activeTrack) {
+		if (
+			prevState.activeTrack !== this.state.activeTrack &&
+			!this.state.isMock
+		) {
+			console.log(this.state.isMock);
 			const info = await Spotify.fetchTrackInfo(this.state.activeTrack);
 			this.setState({
 				activeTrackInfo: {
@@ -180,9 +266,20 @@ class App extends React.Component {
 				<h1>
 					Spot<span className="highlight"> On! </span>
 				</h1>
+				{this.state.isMock && (
+					<p
+						className="exit"
+						onClick={() => {
+							sessionStorage.setItem("isMock", "false");
+							window.location = window.location.origin + "?error=access_denied";
+						}}>
+						Mock Version for layout, most buttons wont work. Click here to exit.
+					</p>
+				)}
 
 				<div>
 					<Player
+						isMock={this.state.isMock}
 						token={Spotify.getAccessToken()}
 						setPlayer={this.setPlayer}
 						song={this.state.activeTrack}
@@ -200,6 +297,8 @@ class App extends React.Component {
 					<div className="App">
 						<h2 className="Description">Manage your Spotify library online</h2>
 						<Playlists
+							isMock={this.state.isMock}
+							generateMockData={this.generateMockData}
 							authStatus={this.state.auth}
 							playlists={this.state.userPlaylists}
 							onMount={this.listPlaylists}
@@ -213,7 +312,7 @@ class App extends React.Component {
 							playing={this.state.playing}
 							awaitSetState={this.awaitSetState}
 						/>
-						<SearchBar onSearch={this.search} />
+						<SearchBar onSearch={this.search} isMock={this.state.isMock} />
 						<div className="App-playlist">
 							<SearchResults
 								searchResults={this.state.searchResults}

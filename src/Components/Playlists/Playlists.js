@@ -32,15 +32,34 @@ class Playlists extends React.Component {
 						<li>Loading Playlists...</li>
 					)}
 					{this.props.playlists &&
-						this.props.playlists.map((playlist) => {
+						this.props.playlists.map((playlist, i) => {
 							return (
 								<li
-									key={playlist.id}
+									key={playlist.id ? playlist.id : i}
 									onClick={async () => {
 										this.setState({ activePlaylist: playlist }, async () => {
-											const tracks = await this.props.getTracks(
-												this.state.activePlaylist.tracks.href
-											);
+											let tracks = [
+												{
+													artist: "ArtistName1",
+													album: "AlbumName1",
+													name: "SongName1",
+												},
+												{
+													artist: "ArtistName2",
+													album: "AlbumName2",
+													name: "SongName2",
+												},
+
+												{
+													artist: "ArtistName3",
+													album: "AlbumName3",
+													name: "SongName3",
+												},
+											];
+											if (!this.props.isMock)
+												tracks = await this.props.getTracks(
+													this.state.activePlaylist.tracks.href
+												);
 											this.setState({ activeTracks: tracks }, () => {
 												document
 													.querySelector(".Playlists-info")
@@ -62,6 +81,8 @@ class Playlists extends React.Component {
 			this.props.authStatus === true
 		) {
 			this.setState({ auth: true });
+		}
+		if (prevState.isMock === false && this.state.isMock === true) {
 		}
 	}
 	componentDidMount() {
@@ -86,11 +107,11 @@ class Playlists extends React.Component {
 		const content = this.generateContent();
 		const tracklist = (
 			<div className="TrackList">
-				{this.state.activeTracks.map((track) => {
+				{this.state.activeTracks.map((track, i) => {
 					return (
 						<Track
 							track={track}
-							key={track.id}
+							key={track.id ? track.id : i}
 							setSong={this.props.setSong}
 							stopSong={this.props.stopSong}
 							context={this.state.activePlaylist}
@@ -108,19 +129,7 @@ class Playlists extends React.Component {
 
 		return (
 			<div className="container-playlists">
-				<div
-					className="Playlists"
-					style={
-						!this.state.auth
-							? {
-									display: "flex",
-									justifyContent: "center",
-									alignItems: "center",
-									borderRadius: 30,
-									height: "fit-content",
-							  }
-							: {}
-					}>
+				<div className={!this.state.auth ? "Playlists noAuth" : "Playlists"}>
 					{!this.state.auth && (
 						<>
 							<h3 style={{ margin: "0.8rem", marginTop: "0.5rem" }}>
@@ -130,6 +139,7 @@ class Playlists extends React.Component {
 								className="Authentication"
 								onClick={(e) => {
 									e.preventDefault();
+									sessionStorage.setItem("isMock", "false");
 									window.location = window.location.origin;
 								}}>
 								LOG IN
@@ -142,11 +152,30 @@ class Playlists extends React.Component {
 								}}>
 								We do not share, store or manipulate any of your Spotify
 								information (like user data or email). The app needs
-								authorization to allow you to manage your playlists. <br />
+								authorization to allow you to manage your playlists and
+								playback. <br />
 								<br />
 								Note: Only Spotify premium users may play songs without
 								restrictions, non premium users have access to samples with
 								potential ads.
+							</p>
+							<button
+								className="Authentication"
+								style={{ padding: "1rem" }}
+								onClick={(e) => {
+									e.preventDefault();
+									this.props.generateMockData();
+								}}>
+								I JUST WANT TO SEE IT
+							</button>
+							<p
+								style={{
+									fontSize: "0.9rem",
+									margin: "0.8rem",
+									textAlign: "justify",
+								}}>
+								If you just want to see the App but not provide any credentials
+								click the button below to generate Mock data
 							</p>
 						</>
 					)}
@@ -187,6 +216,7 @@ class Playlists extends React.Component {
 									<button
 										className="Remove"
 										onClick={() => {
+											if (this.props.isMock) return;
 											if (
 												window.confirm(
 													`Are you sure you want to delete ${this.state.activePlaylist.name}? This is irreversible.`
