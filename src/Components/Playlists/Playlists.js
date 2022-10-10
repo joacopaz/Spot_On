@@ -175,7 +175,8 @@ class Playlists extends React.Component {
 									textAlign: "justify",
 								}}>
 								If you just want to see the App but not provide any credentials
-								click the button below to generate Mock data
+								click the button above to generate Mock data. This is only an
+								esthetic view, the App won't work without Spotify credentials.
 							</p>
 						</>
 					)}
