@@ -48,12 +48,6 @@ class Player extends React.Component {
 						.querySelector("#PlayButton")
 						.addEventListener("click", () => {
 							return player.getCurrentState().then((state) => {
-								// if (!state) {
-								// 	setTimeout(() => {
-								// 		document.querySelector("#PlayButton").click();
-								// 	}, 200);
-								// 	return;
-								// } else {
 								this.props.updatePlayState(state.paused);
 								player.togglePlay();
 								// }

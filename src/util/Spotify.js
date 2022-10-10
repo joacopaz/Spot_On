@@ -9,7 +9,15 @@ const clientId = "752142ca66624fbaa14aae32426abfcc";
 const redirectURI = "https://spot0n.netlify.app/";
 const Spotify = {
 	getAccessToken() {
-		if (accessToken) return accessToken;
+		if (window.location.href.match(/error=access_denied/)) {
+			sessionStorage.setItem("auth", "false");
+			console.log("running");
+			return "ERROR";
+		}
+		if (accessToken) {
+			sessionStorage.setItem("auth", "true");
+			return accessToken;
+		}
 		// check for access token match
 		const accessTokenMatch = window.location.href.match(/access_token=([^&]*)/);
 		const expiresInMatch = window.location.href.match(/expires_in=([^&]*)/);
@@ -24,9 +32,10 @@ const Spotify = {
 			// This clears the parameters, allowing us to grab a new access token when it expires.
 			window.setTimeout(() => {
 				accessToken = "";
-				sessionStorage.setItem("auth", false);
+				sessionStorage.setItem("auth", "false");
 			}, expiresIn * 1000);
 			window.history.pushState("Access Token", null, "/");
+			sessionStorage.setItem("auth", "true");
 			return accessToken;
 		} else {
 			const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-read-collaborative%20playlist-modify-public%20playlist-read-private%20playlist-modify-private streaming%20user-read-email user-read-private%20user-read-playback-state&redirect_uri=${redirectURI}&state=${sessionStorage.getItem(
@@ -35,13 +44,14 @@ const Spotify = {
 			if (document.querySelector(".SearchBar input")) {
 				searchTerm = document.querySelector(".SearchBar input").value;
 				sessionStorage.setItem("search", searchTerm);
-				sessionStorage.setItem("auth", true);
+				sessionStorage.setItem("auth", "true");
 				window.location = accessUrl;
 			}
 		}
 	},
 	async search(term) {
 		const accessToken = Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const url = "https://api.spotify.com/v1";
 		const endpoint = "/search?type=track&q=";
 		const request = url + endpoint + term;
@@ -82,6 +92,7 @@ const Spotify = {
 	savePlaylist(name, trackUris, description) {
 		if (!name || !trackUris.length) return;
 		const accessToken = Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		let userId;
 		return fetch("https://api.spotify.com/v1/me", { headers: headers })
@@ -128,6 +139,7 @@ const Spotify = {
 	async fetchTracks(href) {
 		const tracks = [];
 		const accessToken = Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		const response = await fetch(href, { headers: headers });
 		let jsonResponse = await response.json();
@@ -155,6 +167,7 @@ const Spotify = {
 	},
 	async connectPlayer(player) {
 		const accessToken = await Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		try {
 			return await fetch(`https://api.spotify.com/v1/me/player`, {
@@ -168,6 +181,7 @@ const Spotify = {
 	},
 	async playSongs(deviceId, uris, context) {
 		const accessToken = await Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		let body;
 		let contextUri;
@@ -199,6 +213,7 @@ const Spotify = {
 	},
 	async deletePlaylist(playlistId) {
 		const accessToken = await Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		const request = await fetch(
 			`https://api.spotify.com/v1/playlists/${playlistId}/followers`,
@@ -208,6 +223,7 @@ const Spotify = {
 	},
 	async stopSong(deviceId) {
 		const accessToken = await Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		const request = await fetch(
 			`https://api.spotify.com/v1/me/player/pause?${deviceId}`,
@@ -217,6 +233,7 @@ const Spotify = {
 	},
 	async setVolume(percentage, deviceId) {
 		const accessToken = await Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		const request = await fetch(
 			`https://api.spotify.com/v1/me/player/volume?volume_percent=${percentage}&device_id=${deviceId}`,
@@ -226,6 +243,7 @@ const Spotify = {
 	},
 	async fetchTrackInfo(trackUri) {
 		const accessToken = Spotify.getAccessToken();
+		if (accessToken === "ERROR") return;
 		const headers = { Authorization: `Bearer ${accessToken}` };
 		const id = trackUri.match(/track:([^&]*)/)[1];
 		const response = await fetch(`https://api.spotify.com/v1/tracks/${id}`, {

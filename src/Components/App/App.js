@@ -22,6 +22,7 @@ class App extends React.Component {
 			playerConnected: false,
 			playing: false,
 			createNew: false,
+			auth: false,
 		};
 		this.addTrack = this.addTrack.bind(this);
 		this.removeTrack = this.removeTrack.bind(this);
@@ -40,11 +41,6 @@ class App extends React.Component {
 		this.updateTrack = this.updateTrack.bind(this);
 		this.setVolume = this.setVolume.bind(this);
 		this.awaitSetState = this.awaitSetState.bind(this);
-		if (sessionStorage.getItem("auth")) {
-			this.state.auth = true;
-		} else {
-			this.state.auth = false;
-		}
 	}
 	awaitSetState(newState) {
 		return new Promise((r) => this.setState(newState, r));
@@ -132,10 +128,6 @@ class App extends React.Component {
 		if (this.state.player && !this.state.playerConnected) {
 			await Spotify.connectPlayer(this.state.player);
 			await this.awaitSetState({ playerConnected: true });
-			// return setTimeout(() => {
-			// 	Spotify.getCurrentTrack();
-			// 	// this.setState({activeTrack: })
-			// }, 1000);
 		}
 		return;
 	}
@@ -155,6 +147,8 @@ class App extends React.Component {
 		Spotify.setVolume(percentage, this.state.player);
 	}
 	async componentDidMount() {
+		if (sessionStorage.getItem("auth") === "true")
+			this.setState({ auth: true });
 		await this.connect();
 		if (sessionStorage.getItem("search")) {
 			setTimeout(() => {
@@ -182,72 +176,73 @@ class App extends React.Component {
 	}
 	render() {
 		return (
-			<div>
-				<Player
-					token={Spotify.getAccessToken()}
-					setPlayer={this.setPlayer}
-					song={this.state.activeTrack}
-					play={this.connect}
-					status={this.state.playerConnected}
-					updatePlayState={this.updatePlayState}
-					isPaused={this.state.playing}
-					updateTrack={this.updateTrack}
-					setVolume={this.setVolume}
-					context={this.state.context}
-					setSong={this.setSong}
-					getTracks={this.fetchTracks}
-					activeTrackInfo={this.state.activeTrackInfo}
-				/>
+			<>
 				<h1>
 					Spot<span className="highlight"> On! </span>
 				</h1>
-				<div className="App">
-					<h2 className="Description">Manage your Spotify library online</h2>
-					<Playlists
-						authStatus={this.state.auth}
-						onClick={this.auth}
-						playlists={this.state.userPlaylists}
-						onMount={this.listPlaylists}
-						getTracks={this.fetchTracks}
-						setSong={this.setSong}
-						deletePlaylist={this.deletePlaylist}
-						stopSong={this.stopSong}
-						activeTrack={this.state.activeTrack}
-						activeTrackName={this.state.activeTrackInfo}
-						playerConnected={this.state.playerConnected}
-						playing={this.state.playing}
-						awaitSetState={this.awaitSetState}
-					/>
-					<SearchBar onSearch={this.search} />
 
-					<div className="App-playlist">
-						<SearchResults
-							searchResults={this.state.searchResults}
-							onAdd={this.addTrack}
+				<div>
+					<Player
+						token={Spotify.getAccessToken()}
+						setPlayer={this.setPlayer}
+						song={this.state.activeTrack}
+						play={this.connect}
+						status={this.state.playerConnected}
+						updatePlayState={this.updatePlayState}
+						isPaused={this.state.playing}
+						updateTrack={this.updateTrack}
+						setVolume={this.setVolume}
+						context={this.state.context}
+						setSong={this.setSong}
+						getTracks={this.fetchTracks}
+						activeTrackInfo={this.state.activeTrackInfo}
+					/>
+					<div className="App">
+						<h2 className="Description">Manage your Spotify library online</h2>
+						<Playlists
+							authStatus={this.state.auth}
+							playlists={this.state.userPlaylists}
+							onMount={this.listPlaylists}
+							getTracks={this.fetchTracks}
 							setSong={this.setSong}
+							deletePlaylist={this.deletePlaylist}
 							stopSong={this.stopSong}
 							activeTrack={this.state.activeTrack}
 							activeTrackName={this.state.activeTrackInfo}
 							playerConnected={this.state.playerConnected}
 							playing={this.state.playing}
-							playlistTracks={this.state.playlistTracks}
+							awaitSetState={this.awaitSetState}
 						/>
-						<PlayList
-							playlistName={this.state.playlistName}
-							playlistTracks={this.state.playlistTracks}
-							onRemove={this.removeTrack}
-							onNameChange={this.updatePlaylistName}
-							onSave={this.savePlaylist}
-							setSong={this.setSong}
-							stopSong={this.stopSong}
-							activeTrack={this.state.activeTrack}
-							activeTrackName={this.state.activeTrackInfo}
-							playerConnected={this.state.playerConnected}
-							playing={this.state.playing}
-						/>
+						<SearchBar onSearch={this.search} />
+						<div className="App-playlist">
+							<SearchResults
+								searchResults={this.state.searchResults}
+								onAdd={this.addTrack}
+								setSong={this.setSong}
+								stopSong={this.stopSong}
+								activeTrack={this.state.activeTrack}
+								activeTrackName={this.state.activeTrackInfo}
+								playerConnected={this.state.playerConnected}
+								playing={this.state.playing}
+								playlistTracks={this.state.playlistTracks}
+							/>
+							<PlayList
+								playlistName={this.state.playlistName}
+								playlistTracks={this.state.playlistTracks}
+								onRemove={this.removeTrack}
+								onNameChange={this.updatePlaylistName}
+								onSave={this.savePlaylist}
+								setSong={this.setSong}
+								stopSong={this.stopSong}
+								activeTrack={this.state.activeTrack}
+								activeTrackName={this.state.activeTrackInfo}
+								playerConnected={this.state.playerConnected}
+								playing={this.state.playing}
+							/>
+						</div>
 					</div>
 				</div>
-			</div>
+			</>
 		);
 	}
 }

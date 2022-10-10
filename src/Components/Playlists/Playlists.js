@@ -10,18 +10,25 @@ class Playlists extends React.Component {
 			activePlaylist: "",
 			activeTracks: [],
 		};
-		this.auth = this.auth.bind(this);
 		this.handleChangeName = this.handleChangeName.bind(this);
 		this.handleChangeDesc = this.handleChangeDesc.bind(this);
 	}
-	auth() {
-		this.props.onClick();
-		this.setState({ auth: this.props.authStatus });
-	}
+
 	generateContent() {
 		return (
 			<div className="PlaylistList">
-				<ul>
+				<ul
+					style={
+						this.props.playlists.length < 1
+							? {
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+									height: "50%",
+							  }
+							: {}
+					}>
+					{this.props.playlists.length < 1 && <li>Loading Playlists...</li>}
 					{this.props.playlists &&
 						this.props.playlists.map((playlist) => {
 							return (
@@ -46,6 +53,14 @@ class Playlists extends React.Component {
 				</ul>
 			</div>
 		);
+	}
+	componentDidUpdate(prevProps, prevState) {
+		if (
+			prevProps.authStatus !== this.props.authStatus &&
+			this.props.authStatus === true
+		) {
+			this.setState({ auth: true });
+		}
 	}
 	componentDidMount() {
 		this.props.onMount();
@@ -91,13 +106,50 @@ class Playlists extends React.Component {
 
 		return (
 			<div className="container-playlists">
-				<div className="Playlists">
-					{this.state.auth && <h2>Your Playlists</h2>}
+				<div
+					className="Playlists"
+					style={
+						!this.state.auth
+							? {
+									display: "flex",
+									justifyContent: "center",
+									alignItems: "center",
+									borderRadius: 30,
+									height: "fit-content",
+							  }
+							: {}
+					}>
 					{!this.state.auth && (
-						<button className="Authentication" onClick={this.auth}>
-							LOG IN
-						</button>
+						<>
+							<h3 style={{ margin: "0.8rem", marginTop: "0.5rem" }}>
+								Please log into your Spotify Account to use this App.
+							</h3>
+							<button
+								className="Authentication"
+								onClick={(e) => {
+									e.preventDefault();
+									window.location = window.location.origin;
+								}}>
+								LOG IN
+							</button>
+							<p
+								style={{
+									fontSize: "0.9rem",
+									margin: "0.8rem",
+									textAlign: "justify",
+								}}>
+								We do not share, store or manipulate any of your Spotify
+								information (like user data or email). The app needs
+								authorization to allow you to manage your playlists. <br />
+								<br />
+								Note: Only Spotify premium users may play songs without
+								restrictions, non premium users have access to samples with
+								potential ads.
+							</p>
+						</>
 					)}
+					{this.state.auth && <h2>Your Playlists</h2>}
+
 					{this.state.auth && content}
 					{this.state.auth && (
 						<button
