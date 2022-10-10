@@ -19,7 +19,7 @@ class Playlists extends React.Component {
 			<div className="PlaylistList">
 				<ul
 					style={
-						this.props.playlists.length < 1
+						this.props.playlists && this.props.playlists.length < 1
 							? {
 									display: "flex",
 									alignItems: "center",
@@ -28,7 +28,9 @@ class Playlists extends React.Component {
 							  }
 							: {}
 					}>
-					{this.props.playlists.length < 1 && <li>Loading Playlists...</li>}
+					{this.props.playlists && this.props.playlists.length < 1 && (
+						<li>Loading Playlists...</li>
+					)}
 					{this.props.playlists &&
 						this.props.playlists.map((playlist) => {
 							return (
