@@ -192,6 +192,7 @@ textarea.description {
 	}
 	.Playlists-info .TrackList {
 		max-height: 65vmax;
+		height: unset;
 		padding: 0.2rem;
 	}
 	.Playlists-info .button-container {
