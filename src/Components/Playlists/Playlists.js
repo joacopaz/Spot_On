@@ -106,7 +106,7 @@ class Playlists extends React.Component {
 	render() {
 		const content = this.generateContent();
 		const tracklist = (
-			<div className="TrackList">
+			<div className={this.props.isMock ? "TrackList mock" : "TrackList"}>
 				{this.state.activeTracks.map((track, i) => {
 					return (
 						<Track

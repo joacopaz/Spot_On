@@ -194,6 +194,13 @@ textarea.description {
 		max-height: 65vmax;
 		padding: 0.2rem;
 	}
+	.Playlists-info .button-container {
+		padding-bottom: 0.4rem;
+	}
+	.Playlists-info .TrackList .mock {
+		margin-bottom: 0;
+		padding-bottom: 0.2rem;
+	}
 	.Playlists-info input {
 		font-size: 1rem;
 	}
