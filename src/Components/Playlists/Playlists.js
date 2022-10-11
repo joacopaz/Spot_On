@@ -134,7 +134,12 @@ class Playlists extends React.Component {
 				<div className={!this.state.auth ? "Playlists noAuth" : "Playlists"}>
 					{!this.state.auth && (
 						<>
-							<h3 style={{ margin: "0.8rem", marginTop: "0.5rem" }}>
+							<h3
+								style={{
+									margin: "0.8rem",
+									marginTop: "0.5rem",
+									textAlign: "center",
+								}}>
 								Please log into your Spotify Account to use this App.
 							</h3>
 							<button
@@ -160,7 +165,7 @@ class Playlists extends React.Component {
 								style={{
 									fontSize: "0.9rem",
 									margin: "0.8rem",
-									textAlign: "justify",
+									textAlign: "left",
 								}}>
 								We do not share, store or manipulate any of your Spotify
 								information (like user data or email). The app needs
@@ -184,7 +189,7 @@ class Playlists extends React.Component {
 								style={{
 									fontSize: "0.9rem",
 									margin: "0.8rem",
-									textAlign: "justify",
+									textAlign: "left",
 								}}>
 								If you just want to see the App but not provide any credentials
 								click the button above to generate Mock data. This is only an
