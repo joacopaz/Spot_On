@@ -2,15 +2,14 @@
 	display: flex;
 	position: fixed;
 	align-items: center;
-	min-height: 4rem;
-	bottom: 2rem;
-	width: 80%;
-	left: 50%;
+	min-height: 5rem;
+	bottom: 0rem;
+	width: 100%;
+	left: 49.99%;
 	transform: translateX(-50%);
 	text-align: center;
 	background-color: rgb(25, 92, 25);
 	color: white;
-	border-radius: 2rem;
 	caret-color: transparent;
 	flex-wrap: wrap;
 	z-index: 100;
@@ -156,7 +155,6 @@ input[type="range"]:active::-moz-range-thumb {
 	.playerContainer {
 		flex-direction: column;
 		gap: 10px;
-		width: 100%;
 		border-radius: 0;
 		bottom: 0;
 		background-image: url("./spotifyLogo.png");

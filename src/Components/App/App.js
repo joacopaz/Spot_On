@@ -257,9 +257,10 @@ class App extends React.Component {
 		this.listPlaylists();
 	}
 	listPlaylists() {
-		Spotify.getPlaylists().then((playlists) =>
-			this.setState({ userPlaylists: playlists })
-		);
+		Spotify.getPlaylists().then((playlists) => {
+			console.log(playlists);
+			this.setState({ userPlaylists: playlists });
+		});
 	}
 	deletePlaylist(playlistId) {
 		if (this.state.isMock)
@@ -268,6 +269,7 @@ class App extends React.Component {
 					(playlist) => playlist.name !== playlistId
 				),
 			});
+		document.querySelector(".Playlists").scrollIntoView();
 		return Spotify.deletePlaylist(playlistId);
 	}
 	async fetchTracks(href) {
@@ -363,7 +365,7 @@ class App extends React.Component {
 	}
 	render() {
 		return (
-			<>
+			<div>
 				<h1>
 					Spot<span className="highlight"> On! </span>
 				</h1>
@@ -378,7 +380,7 @@ class App extends React.Component {
 					</p>
 				)}
 
-				<div>
+				<div className={this.state.isMock ? "mockApp" : "realApp"}>
 					<Player
 						isMock={this.state.isMock}
 						token={Spotify.getAccessToken()}
@@ -442,7 +444,7 @@ class App extends React.Component {
 						</div>
 					</div>
 				</div>
-			</>
+			</div>
 		);
 	}
 }

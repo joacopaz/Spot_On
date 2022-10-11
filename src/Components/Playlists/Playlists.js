@@ -84,8 +84,6 @@ class Playlists extends React.Component {
 		) {
 			this.setState({ auth: true });
 		}
-		if (prevState.isMock === false && this.state.isMock === true) {
-		}
 	}
 	componentDidMount() {
 		this.props.onMount();
@@ -230,7 +228,12 @@ class Playlists extends React.Component {
 
 								{this.state.activeTracks && tracklist}
 								<div className="button-container">
-									<p>Total tracks: {this.state.activePlaylist.tracks.total}</p>
+									<p>
+										Total tracks:
+										{this.state.activePlaylist.tracks.total
+											? this.state.activePlaylist.tracks.total
+											: this.state.activeTracks.length}
+									</p>
 									<button
 										className="Remove"
 										onClick={() => {

@@ -5,8 +5,8 @@ if (!sessionStorage.getItem("state")) {
 	sessionStorage.setItem("state", makeId(24));
 }
 const clientId = "752142ca66624fbaa14aae32426abfcc";
-// const redirectURI = "http://localhost:3000/";
-const redirectURI = "https://spot0n.netlify.app/";
+const redirectURI = "http://localhost:3000/";
+// const redirectURI = "https://spot0n.netlify.app/";
 const Spotify = {
 	getAccessToken() {
 		if (!document.cookie.match(/SpotifyAuth=true/)) return;

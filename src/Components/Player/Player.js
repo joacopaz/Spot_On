@@ -166,8 +166,6 @@ class Player extends React.Component {
 				className="playerContainer"
 				style={{
 					display: !this.props.isMock && !this.props.status && "none",
-					bottom: this.props.isMock && "2.8rem",
-					transform: this.props.isMock && "translateX(-50.1%)",
 				}}>
 				<div className="player-left">
 					{this.state.ready && (
