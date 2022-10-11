@@ -12,7 +12,11 @@ class Player extends React.Component {
 	}
 
 	componentDidMount() {
-		if (sessionStorage.getItem("isMock" === "true")) return;
+		if (
+			sessionStorage.getItem("isMock" === "true") ||
+			!document.cookie.match(/SpotifyAuth=true/)
+		)
+			return;
 		if (
 			!document.querySelector('[src="https://sdk.scdn.co/spotify-player.js"]')
 		) {
@@ -24,8 +28,12 @@ class Player extends React.Component {
 
 		// Player handler -----------------------------------------
 		window.onSpotifyWebPlaybackSDKReady = () => {
-			// You can now initialize Spotify.Player and use the SDK
-			console.log("Initialized web player");
+			if (
+				sessionStorage.getItem("isMock" === "true") ||
+				!document.cookie.match(/SpotifyAuth=true/)
+			)
+				// You can now initialize Spotify.Player and use the SDK
+				console.log("Initialized web player");
 
 			const player = new window.Spotify.Player({
 				name: "Spot On!",

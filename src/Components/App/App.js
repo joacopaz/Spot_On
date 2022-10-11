@@ -111,6 +111,24 @@ class App extends React.Component {
 					description: "Music for working in the wood shop",
 					name: "Woodworking Music",
 					tracks: {
+						tracks: [
+							{
+								artist: "ArtistName1",
+								album: "AlbumName1",
+								name: "SongName1",
+							},
+							{
+								artist: "ArtistName2",
+								album: "AlbumName2",
+								name: "SongName2",
+							},
+
+							{
+								artist: "ArtistName3",
+								album: "AlbumName3",
+								name: "SongName3",
+							},
+						],
 						href: "mock",
 						total: 178,
 					},
@@ -120,6 +138,24 @@ class App extends React.Component {
 					description: "Peaceful and relaxing nature sounds to soothe the soul",
 					name: "Nature Sounds",
 					tracks: {
+						tracks: [
+							{
+								artist: "ArtistName4",
+								album: "AlbumName4",
+								name: "SongName4",
+							},
+							{
+								artist: "ArtistName5",
+								album: "AlbumName5",
+								name: "SongName5",
+							},
+
+							{
+								artist: "ArtistName6",
+								album: "AlbumName6",
+								name: "SongName6",
+							},
+						],
 						href: "mock",
 						total: 85,
 					},
@@ -129,6 +165,24 @@ class App extends React.Component {
 					description: "Focusing and Study music",
 					name: "Deep Focus",
 					tracks: {
+						tracks: [
+							{
+								artist: "ArtistName7",
+								album: "AlbumName7",
+								name: "SongName7",
+							},
+							{
+								artist: "ArtistName8",
+								album: "AlbumName8",
+								name: "SongName8",
+							},
+
+							{
+								artist: "ArtistName9",
+								album: "AlbumName9",
+								name: "SongName9",
+							},
+						],
 						href: "mock",
 						total: 203,
 					},
@@ -173,9 +227,23 @@ class App extends React.Component {
 		this.setState({ playlistName: name });
 	}
 	savePlaylist() {
+		if (sessionStorage.getItem("isMock") === "true") {
+			const userPlaylists = this.state.userPlaylists;
+			userPlaylists.push({
+				description: "New SpotOn Playlist",
+				name: this.state.playlistName,
+				tracks: {
+					tracks: this.state.playlistTracks,
+					total: this.state.playlistTracks.length,
+				},
+			});
+			this.setState({ playlistName: "New Playlist", playlistTracks: [] });
+		}
 		const trackURIs = this.state.playlistTracks.map((track) => track.uri);
 		Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
 			this.setState({ playlistName: "New Playlist", playlistTracks: [] });
+			this.listPlaylists();
+			document.querySelector(".Playlists").scrollIntoView();
 		});
 	}
 	search(term) {
@@ -193,6 +261,12 @@ class App extends React.Component {
 		);
 	}
 	deletePlaylist(playlistId) {
+		if (this.state.isMock)
+			this.setState({
+				userPlaylists: this.state.userPlaylists.filter(
+					(playlist) => playlist.name !== playlistId
+				),
+			});
 		return Spotify.deletePlaylist(playlistId);
 	}
 	async fetchTracks(href) {
@@ -253,6 +327,9 @@ class App extends React.Component {
 		Spotify.setVolume(percentage, this.state.player);
 	}
 	async componentDidMount() {
+		if (!document.cookie.match(/SpotifyAuth=true/)) return;
+		if (window.location.href.match(/error=access_denied/))
+			sessionStorage.setItem("AcceptsSpotify", "false");
 		if (sessionStorage.getItem("auth") === "true")
 			this.setState({ auth: true });
 		await this.connect();
@@ -269,7 +346,6 @@ class App extends React.Component {
 			prevState.activeTrack !== this.state.activeTrack &&
 			!this.state.isMock
 		) {
-			console.log(this.state.isMock);
 			const info = await Spotify.fetchTrackInfo(this.state.activeTrack);
 			this.setState({
 				activeTrackInfo: {

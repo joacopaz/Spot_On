@@ -56,6 +56,8 @@ class Playlists extends React.Component {
 													name: "SongName3",
 												},
 											];
+											if (this.props.isMock)
+												tracks = [...this.state.activePlaylist.tracks.tracks];
 											if (!this.props.isMock)
 												tracks = await this.props.getTracks(
 													this.state.activePlaylist.tracks.href
@@ -140,6 +142,16 @@ class Playlists extends React.Component {
 								onClick={(e) => {
 									e.preventDefault();
 									sessionStorage.setItem("isMock", "false");
+									sessionStorage.setItem("AcceptsSpotify", "true");
+									const generateCookie = () => {
+										document.cookie = JSON.stringify(
+											`SpotifyAuth=true; expires=${new Date(
+												new Date().getTime() + 1000 * 60 * 60 * 24 * 365
+											).toGMTString()}; path=/; SameSite=Lax`
+										);
+									};
+									generateCookie();
+
 									window.location = window.location.origin;
 								}}>
 								LOG IN
@@ -217,7 +229,15 @@ class Playlists extends React.Component {
 									<button
 										className="Remove"
 										onClick={() => {
-											if (this.props.isMock) return;
+											if (this.props.isMock) {
+												this.props.deletePlaylist(
+													this.state.activePlaylist.name
+												);
+												return this.setState({
+													activePlaylist: "",
+													activeTracks: [],
+												});
+											}
 											if (
 												window.confirm(
 													`Are you sure you want to delete ${this.state.activePlaylist.name}? This is irreversible.`
