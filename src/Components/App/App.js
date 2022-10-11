@@ -380,7 +380,12 @@ class App extends React.Component {
 					</p>
 				)}
 
-				<div className={this.state.isMock ? "mockApp" : "realApp"}>
+				<div
+					className={
+						this.state.isMock && this.state.playerConnected
+							? "mockApp"
+							: "realApp"
+					}>
 					<Player
 						isMock={this.state.isMock}
 						token={Spotify.getAccessToken()}
