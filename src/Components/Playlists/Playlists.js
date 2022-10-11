@@ -166,7 +166,7 @@ class Playlists extends React.Component {
 									e.preventDefault();
 									this.props.generateMockData();
 								}}>
-								I JUST WANT TO SEE IT
+								MOCK LOGIN
 							</button>
 							<p
 								style={{
@@ -176,7 +176,7 @@ class Playlists extends React.Component {
 								}}>
 								If you just want to see the App but not provide any credentials
 								click the button above to generate Mock data. This is only an
-								esthetic view, the App won't work without Spotify credentials.
+								aesthetic view, the App won't work without Spotify credentials.
 							</p>
 						</>
 					)}
