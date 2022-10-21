@@ -120,8 +120,14 @@
 .loader {
 	position: absolute;
 }
+.volume-icon {
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	transform: translate(-120%, -25%);
+}
 
-input[type="range"] {
+.volume-bar {
 	-webkit-appearance: none;
 	height: 5px;
 	width: 10rem;

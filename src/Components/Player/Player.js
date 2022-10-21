@@ -1,5 +1,7 @@
 import React from "react";
 import "./Player.css";
+import vol from "./vol.png";
+import paused from "./no-vol.png";
 
 class Player extends React.Component {
 	constructor(props) {
@@ -204,24 +206,30 @@ class Player extends React.Component {
 					</div>
 
 					{this.state.ready && (
-						<input
-							type={"range"}
-							className={"volume-bar"}
-							min={0}
-							max={100}
-							step={1}
-							defaultValue={50}
-							onMouseUp={(e) => {
-								if (this.props.isMock) return;
-								this.props.setVolume(e.target.value);
-							}}
-							onTouchEnd={(e) => {
-								if (this.props.isMock) return;
-								this.props.setVolume(e.target.value);
-							}}
-							onChange={(e) => {
-								e.target.style.backgroundSize = e.target.value + "% 100%";
-							}}></input>
+						<div>
+							<img
+								className="volume-icon"
+								src={this.props.isPaused ? vol : paused}
+								alt="Volume"></img>
+							<input
+								type={"range"}
+								className={"volume-bar"}
+								min={0}
+								max={100}
+								step={1}
+								defaultValue={50}
+								onMouseUp={(e) => {
+									if (this.props.isMock) return;
+									this.props.setVolume(e.target.value);
+								}}
+								onTouchEnd={(e) => {
+									if (this.props.isMock) return;
+									this.props.setVolume(e.target.value);
+								}}
+								onChange={(e) => {
+									e.target.style.backgroundSize = e.target.value + "% 100%";
+								}}></input>
+						</div>
 					)}
 				</div>
 				<div className="player-right">

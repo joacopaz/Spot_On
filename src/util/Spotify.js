@@ -157,9 +157,10 @@ const Spotify = {
 			jsonResponse.items.forEach((item) => items.push(item));
 		}
 		items.forEach((item) => {
-			if (!tracks.some((storedTrack) => storedTrack.id === item.track.id)) {
-				tracks.push(item.track);
-			}
+			if (item.track)
+				if (!tracks.some((storedTrack) => storedTrack.id === item.track.id)) {
+					tracks.push(item.track);
+				}
 		});
 		return tracks.map((track) => {
 			return {
